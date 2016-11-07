@@ -50,8 +50,39 @@ public class Main {
         return neighbors.get(index);
     }
 
+//    Tear down this wall!
+    static void reagan(Room oldRoom, Room newRoom) {
+        if (oldRoom.row < newRoom.row) {
+            oldRoom.hasBottom = false;
+        }
+        else if (oldRoom.row > newRoom.row) {
+            newRoom.hasBottom = false;
+        }
+        else if (oldRoom.col < newRoom.col) {
+            oldRoom.hasRight = false;
+        }
+        else if (oldRoom.col > newRoom.col) {
+            newRoom.hasRight = false;
+        }
+    }
+
+    static boolean createMaze(Room[][] rooms, Room room) {
+        room.wasVisited = true;
+        Room nextRoom = randomNeighbor(rooms, room.row, room.col);
+        if (nextRoom == null) {
+            return false;
+        }
+
+        reagan(room, nextRoom);
+
+        while (createMaze(rooms, nextRoom));
+
+        return true;
+    }
+
     public static void main(String[] args) {
         Room[][] rooms = createRooms();
+        createMaze(rooms, rooms[0][0]);
         for (Room[] row : rooms) {
             System.out.print(" _");
         }
@@ -60,7 +91,18 @@ public class Main {
         for (Room[] row : rooms) {
             System.out.print("|");
             for (Room room : row) {
-                System.out.print("_|");
+                if (room.hasBottom) {
+                    System.out.print("_");
+                }
+                else {
+                    System.out.print(" ");
+                }
+                if (room.hasRight) {
+                    System.out.print("|");
+                }
+                else {
+                    System.out.print(" ");
+                }
             }
             System.out.println();
         }
