@@ -66,10 +66,23 @@ public class Main {
         }
     }
 
+
+
     static boolean createMaze(Room[][] rooms, Room room) {
         room.wasVisited = true;
         Room nextRoom = randomNeighbor(rooms, room.row, room.col);
         if (nextRoom == null) {
+            boolean theEnd = false;
+            for (Room[] row : rooms) {
+                for (Room room1 : row) {
+                    if (room1.isEnd == true) {
+                        theEnd = true;
+                    }
+                }
+            }
+            if (theEnd == false) {
+                room.isEnd = true;
+            }
             return false;
         }
 
@@ -83,15 +96,24 @@ public class Main {
     public static void main(String[] args) {
         Room[][] rooms = createRooms();
         createMaze(rooms, rooms[0][0]);
+        Room startRoom = rooms[0][0];
+        startRoom.isStart = true;
         for (Room[] row : rooms) {
             System.out.print(" _");
         }
         System.out.println();
 
+
         for (Room[] row : rooms) {
             System.out.print("|");
             for (Room room : row) {
-                if (room.hasBottom) {
+                if (room.isStart) {
+                    System.out.print("o");
+                }
+                else if (room.isEnd) {
+                    System.out.print("x");
+                }
+                else if (room.hasBottom) {
                     System.out.print("_");
                 }
                 else {

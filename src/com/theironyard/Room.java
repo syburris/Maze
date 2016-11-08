@@ -9,6 +9,8 @@ public class Room {
     boolean wasVisited = false;
     boolean hasRight = true;
     boolean hasBottom = true;
+    boolean isStart = false;
+    boolean isEnd = false;
 
     public Room() {
     }
